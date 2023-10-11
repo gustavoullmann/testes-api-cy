@@ -7,7 +7,7 @@ describe('Login', () => {
             method: 'POST',
             url: 'login',
             body: {
-                "email": "fulano@qa.com",
+                "email": "fulanodetaldois@qa.com.br",
                 "password": "teste" 
             }
         }).then((response) => {
@@ -16,5 +16,4 @@ describe('Login', () => {
             cy.log(response.body.authorization)
         })
     });
-
 });
