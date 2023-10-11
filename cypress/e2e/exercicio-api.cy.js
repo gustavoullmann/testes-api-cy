@@ -1,19 +1,32 @@
 /// <reference types="cypress" />
-import contratoUser from "../contracts/usuario.contract";
+import usuariosSchema from "../contracts/usuario.contrac";
+const { faker } = require("@faker-js/faker");
 
 describe("Testes da Funcionalidade Usuários", () => {
-  it.only("Deve validar contrato de usuários", () => {
+  it("Deve validar contrato de usuários", () => {
     cy.request("usuarios").then((response) => {
-      return contratoUser.validateAsync(response.body);
+      return usuariosSchema.validateAsync(response.body);
     });
   });
 
   it("Deve listar usuários cadastrados", () => {
-    //TODO:
+    let fakerEmail = faker.internet.email();
+    cy.cadastrarUsuario("Teste Usuario2", fakerEmail, "testeSenha", "true");
+    cy.request("usuarios").then((response) => {
+      expect(response.status).to.equal(200);
+      expect(response.body.quantidade).to.be.greaterThan(0);
+    });
   });
 
-  it("Deve cadastrar um usuário com sucesso", () => {
-    //TODO:
+  it.only("Deve cadastrar um usuário com sucesso", () => {
+    let fakerEmail = faker.internet.email();
+    cy.cadastrarUsuario("Novo Usuário", fakerEmail, "testeSenha", "false").then(
+      (response) => {
+        expect(response.status).to.equal(201);
+        expect(response.body.message).to.equal(
+          "Cadastro realizado com sucesso"
+        );
+      });
   });
 
   it("Deve validar um usuário com email inválido", () => {
