@@ -31,41 +31,66 @@ describe("Testes da Funcionalidade Usuários", () => {
   });
 
   it("Deve validar um usuário com email inválido", () => {
-    cy.cadastrarUsuario("Usuário Email Inválido", "emailinvalido.com", "testeSenha", "false").then(
-      (response) => {
+    cy.cadastrarUsuario(
+      "Usuário Email Inválido",
+      "emailinvalido.com",
+      "testeSenha",
+      "false"
+    ).then((response) => {
       expect(response.status).to.equal(400);
-      expect(response.body.email).to.equal("email deve ser um email válido")
-      }
-    )
+      expect(response.body.email).to.equal("email deve ser um email válido");
+    });
   });
 
-  it.only("Deve editar um usuário previamente cadastrado", () => {
+  it("Deve editar um usuário previamente cadastrado", () => {
     let fakerEmail = faker.internet.email();
     let novoUsuarioId;
-    
-    cy.cadastrarUsuario("Editar Usuário", fakerEmail, "testeSenha", "true").then(
-      (response) => {
-        expect(response.status).to.equal(201);
-        novoUsuarioId = response.body._id;
 
-        cy.request({
-          method: "PUT",
-          url: `usuarios/${novoUsuarioId}`,
-          body: {
-            nome: "Nome Editado",
-            email: fakerEmail,
-            password: "senhaEditada",
-            administrador: "false",
-          }
-        }).then((response) => {
-          expect(response.status).to.equal(200);
-          expect(response.body.message).to.equal("Registro alterado com sucesso")
-        }) 
-      }
-    )
+    cy.cadastrarUsuario(
+      "Editar Usuário",
+      fakerEmail,
+      "testeSenha",
+      "true"
+    ).then((response) => {
+      expect(response.status).to.equal(201);
+      novoUsuarioId = response.body._id;
+
+      cy.request({
+        method: "PUT",
+        url: `usuarios/${novoUsuarioId}`,
+        body: {
+          nome: "Nome Editado",
+          email: fakerEmail,
+          password: "senhaEditada",
+          administrador: "false",
+        },
+      }).then((response) => {
+        expect(response.status).to.equal(200);
+        expect(response.body.message).to.equal("Registro alterado com sucesso");
+      });
+    });
   });
 
-  it("Deve deletar um usuário previamente cadastrado", () => {
-    //TODO:
+  it.only("Deve deletar um usuário previamente cadastrado", () => {
+    let fakerEmail = faker.internet.email();
+    let novoUsuarioId;
+
+    cy.cadastrarUsuario(
+      "Excluir Usuário",
+      fakerEmail,
+      "testeSenha",
+      "true"
+    ).then((response) => {
+      expect(response.status).to.equal(201);
+      novoUsuarioId = response.body._id;
+
+      cy.request({
+        method: "DELETE",
+        url: `usuarios/${novoUsuarioId}`,
+      }).then((response) => {
+        expect(response.status).to.equal(200);
+        expect(response.body.message).to.equal("Registro excluído com sucesso");
+      });
+    });
   });
 });
