@@ -42,6 +42,7 @@ Cypress.Commands.add(
         password: senha,
         administrador: ehAdministrador,
       },
+      failOnStatusCode: false,
     });
   }
 );
