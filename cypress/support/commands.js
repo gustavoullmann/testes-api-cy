@@ -46,3 +46,26 @@ Cypress.Commands.add(
     });
   }
 );
+
+Cypress.Commands.add(
+  "editarUsuario",
+  (idUsuario, nome, email, senha, ehAdministrador) => {
+    cy.request({
+      method: "PUT",
+      url: `usuarios/${idUsuario}`,
+      body: {
+        nome: nome,
+        email: email,
+        password: senha,
+        administrador: ehAdministrador,
+      },
+    });
+  }
+);
+
+Cypress.Commands.add("deletarUsuario", (idUsuario) => {
+  cy.request({
+    method: "DELETE",
+    url: `usuarios/${idUsuario}`,
+  });
+});
